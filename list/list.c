@@ -3,37 +3,43 @@
 #include "list.h"
 
 typedef struct listNode {
-	void *value;
-	struct listNode *next;
+    void *value;
+    struct listNode *next;
 } listNode;
 
 typedef struct list {
-	listNode *head;
-	listNode *tail;
-	unsigned long len;
+    listNode *head;
+    listNode *tail;
+    unsigned long len;
 } list;
+
+/*
+ *  each element in 4 components: list, head, tail, node
+ *
+ */
 
 list* listCreate() {
     struct list *list;
     if ((list = (struct list*) malloc(sizeof(struct list))) == NULL) {
-	    return NULL;
+        return NULL;
     }
 	
-	list->head = NULL;
-	list->tail = NULL;
-	list->len = 0;
+    list->head = NULL;
+    list->tail = NULL;
+    list->len = 0;
 }
 
-void emptyList(list *list) { 
+void emptyList(list *list) {
+        
 }
 
 list* listAddNodeHead(list *list, void *value) {
-	listNode *node;
-	if ((node = (listNode*)malloc(sizeof(listNode))) == NULL) {
-		return NULL;
-	}
+    listNode *node;
+    if ((node = (listNode*)malloc(sizeof(listNode))) == NULL) {
+        return NULL;
+    }
 	
-	node->value = value;
+    node->value = value;
 	if (list->len == 0) { // set tail
 		list->head = list->tail = node;
 		node->next = NULL;
@@ -53,7 +59,6 @@ list *listAddNodeTail(list *list, void *value) {
 		return NULL;
 	}
 	
-	//each element in list, head, tail, node 
 	node->value = value;
 	if (list->len == 0) {
 		list->head = list->tail = node;
