@@ -54,22 +54,22 @@ list* listAddNodeHead(list *list, void *value) {
 }
 
 list *listAddNodeTail(list *list, void *value) {
-	listNode *node;
-	if ((node = (listNode *)malloc(sizeof(listNode))) == NULL) {
-		return NULL;
-	}
+    listNode *node;
+    if ((node = (listNode *)malloc(sizeof(listNode))) == NULL) {
+        return NULL;
+    }
 	
-	node->value = value;
-	if (list->len == 0) {
-		list->head = list->tail = node;
-		node->next = NULL;
-	} else {
-		list->tail->next = node;
-		list->tail = node;
-		node->next = NULL;
-	}
-	
-	list->len ++;
+    node->value = value;
+    if (list->len == 0) {
+        list->head = list->tail = node;
+        node->next = NULL;
+    } else {
+        list->tail->next = node;
+        list->tail = node;
+        node->next = NULL;
+    }
+
+    list->len ++;
 }
 
 list *listInsertNodeAfter(list *list, listNode *old_node, void *value) {
