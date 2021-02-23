@@ -11,6 +11,8 @@ typedef struct list {
     listNode *head;
     listNode *tail;
     unsigned long len;
+    void (*free)(void *ptr);
+    int (*match)(void *ptr, void *key);
 } list;
 
 /*
@@ -87,6 +89,80 @@ list *listInsertNodeAfter(list *list, listNode *old_node, void *value) {
     }
     
     list->len ++;
+}
+
+list *listInsertNodeBefore(list *list, listNode *old_node, void *value) {
+    listNode *node;
+    if ((node = (listNode*)malloc(sizeof(listNode))) == NULL) {
+        return NULL;
+    }
+    
+    BOOL found = FALSE;
+    listNode *cur = list->head;
+    listNode *prev = list->head;
+    while (cur != NULL) {
+        if (cur == old_node) {
+            node->next = prev->next;
+            prev->next = node;
+            found = TRUE;
+            break;
+        }
+        
+        prev = cur;
+        cur = cur->next;
+    }
+    
+    if (found) {
+        // at least one old_node
+        if (list->head == old_node) {
+            list->head = node;
+        }
+        
+        node->value = value;
+        list->len ++;
+        return list;
+    }
+
+    return NULL;
+}
+
+void listDelNode(list *list, listNode *node) {
+    if (list->len == 0) {
+        return;
+    }
+    
+    BOOL found = FALSE;
+    listNode *cur = list->head;
+    listNode *prev = list->head;
+    while (cur != NULL) {
+        if (cur == node) {
+            prev->next = node->next;
+            found = TRUE;
+            break;
+        }
+        
+        prev = cur;
+        cur = cur->next;
+    }
+    
+    if (found) {
+        if (list->len == 0) {
+        } else if (list->len == 1) {
+            list->free(list->head);
+            list->len = 0;
+            list->head = NULL;
+            list->tail = NULL;
+        } else {
+            if (list->head == node) {
+                list->head = node->next;
+            }
+            if (list->tail == node) {
+                list->tail = prev;
+            }
+            
+            list->len --;
+        }
+    }
 }
 
 
