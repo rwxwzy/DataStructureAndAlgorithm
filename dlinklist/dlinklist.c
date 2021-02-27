@@ -35,9 +35,33 @@ dLinkList *listAddHeadNode(dLinkList *list, void *value) {
     }
     node->value = value;
     
-    node->next = list->head;
-    node->prev = NULL;
-    if (list->len = 0) {
+    if (list->len == 0) {// clear
+        list->head = list->tail = node;
+        node->next = node->prev = NULL;
+    } else {    
+        node->next = list->head;
+        node->prev = NULL;
+        list->head = node;
+    }
+    
+    list->len ++;
+    return list;
+}
+
+dLinkList* dLinkListAddTailNode(dLinkList *list, void *value) {
+    dLinkListNode *node;
+    if ((node = (dLinkListNode*)malloc(sizeof(dLinkListNode))) == NULL) {
+        return NULL;
+    }
+    
+    node->value = value;
+    if (list->len == 0) {
+        list->head = list->tail = node;
+        node->next = node->prev = NULL;
+    } else {
+        node->prev = list->tail;
+        node->next = NULL;
+        list->tail->next = node;
         list->tail = node;
     }
     
@@ -45,10 +69,41 @@ dLinkList *listAddHeadNode(dLinkList *list, void *value) {
     return list;
 }
 
-
-
-
-
+dLinkList *dLinkListInsertNode(dLinkList *list, dLinkListNode *ref_node, void *value, BOOL after) {
+     dLinkListNode *node;
+     if ((node = (dLinkListNode*)malloc(sizeof(dLinkList))) == NULL) {
+         return NULL;
+     }
+     node->value = value;
+     
+     if (after) {
+         node->prev = ref_node;
+         node->next = ref_node->next;
+         
+         ref_node->next = node;
+         if (node->next != NULL) {
+             node->next->prev = node;
+         }
+         if (list->tail == ref_node) {
+             list->tail = node;
+         }
+     } else {
+         node->next = ref_node;
+         node->prev = ref_node->prev;
+         
+         if (node->prev != NULL) {
+             node->prev->next = node;
+         }
+         ref_node->prev = node;
+         
+         if (list->head == ref_node) {
+             list->head = node;
+         }
+     }
+     
+     list->len ++;
+     return list;
+}
 
 
 
