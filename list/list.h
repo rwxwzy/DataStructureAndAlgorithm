@@ -17,4 +17,22 @@
 #define BOOL int
 #endif
 
+typedef struct listNode {
+    void *value;
+    struct listNode *next;
+} listNode;
+typedef output void(*output)(void *value);
+
+typedef struct list {
+    listNode *head;
+    listNode *tail;
+    unsigned long len;
+    void (*free)(void *ptr);
+    int (*match)(void *ptr, void *key);
+    void (*output)(void *value);
+} list;
+
+list *listAddNodeTail(list *list, void *value);
+
+
 #endif

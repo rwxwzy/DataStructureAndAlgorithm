@@ -2,25 +2,14 @@
 #include <stdio.h>
 #include "list.h"
 
-typedef struct listNode {
-    void *value;
-    struct listNode *next;
-} listNode;
 
-typedef struct list {
-    listNode *head;
-    listNode *tail;
-    unsigned long len;
-    void (*free)(void *ptr);
-    int (*match)(void *ptr, void *key);
-} list;
 
 /*
  *  each element in 4 components: list, head, tail, node
  *
  */
 
-list* listCreate() {
+list* listCreate(out output) {
     struct list *list;
     if ((list = (struct list*) malloc(sizeof(struct list))) == NULL) {
         return NULL;
@@ -29,10 +18,14 @@ list* listCreate() {
     list->head = NULL;
     list->tail = NULL;
     list->len = 0;
+    list->output = out;
 }
 
-void emptyList(list *list) {
+void listRelease(list *list) {
+    listNode *node = list->head;
+    while(list->len != 0) {
         
+    }
 }
 
 list* listAddNodeHead(list *list, void *value) {
@@ -166,9 +159,6 @@ void listDelNode(list *list, listNode *node) {
 }
 
 
-void main() {
-	
-}
 
 
 
