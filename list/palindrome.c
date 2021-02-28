@@ -14,29 +14,29 @@ BOOL charMatch(void *value1, void* value2) {
     }
 }
 
-/* stop when pos2->next == NULL for odd
+/* stop when fast->next == NULL for odd
 0        1        2        3        4        5        6        7        8
-        pos1     pos2   
-                 pos1               pos2
-                           pos1                      pos2 
-                                    pos1                               pos2// stop
+        slow     fast   
+                 slow               fast
+                           slow                      fast 
+                                    slow                               fast// stop
 */
 
-/* stop when pos2->next->next == NULL for even
+/* stop when fast->next->next == NULL for even
 0        1        2        3        4        5        6        7        8        9
-        pos1     pos2   
-                 pos1               pos2
-                           pos1                      pos2 
-                                    pos1                               pos2 //stop
+        slow     fast   
+                 slow               fast
+                           slow                      fast 
+                                    slow                               fast //stop
 */
-// So, when pos2->next == NULL or pos2->next->next == NULL, stop
+// So, when fast->next == NULL or fast->next->next == NULL, stop
 
 BOOL isPalindrome(list *list) {
-    if (list->len == 1) {
+    if (list->head == NULL || list->head->next == NULL) { // 0 or 1
         return TRUE;
     }
     
-    if (list->len == 2) {
+    if (list->head->next == NULL) { // 2
         if (list->match(list->head->value, list->head->next->value)) {
             return TRUE;
         } else {
@@ -44,46 +44,48 @@ BOOL isPalindrome(list *list) {
         }
     }
     
-    listNode *pos1, *pos2, *prev, *next;
-    pos1 = pos2 = next = list->head;
+    listNode *slow, *fast, *prev, *next;
+    slow = fast = next = list->head;
     prev = NULL; // for first node
     
+    // find middle and reverse the next pointer for the first middle part
     while(1) {
-        if (pos2->next != NULL) {
-            if (pos2->next->next != NULL) {
+        if (fast->next != NULL && fast->next->next != NULL) {
                 // no change at first
-                pos2 = pos2->next->next;
+                fast = fast->next->next;
                 
-                //pos1 related
-                next = pos1->next;
-                pos1->next = prev;
-                prev = pos1;
-                pos1 = next;                              
-            } else {
-                break;
-            }
+                //slow related
+                next = slow->next;
+                slow->next = prev;
+                prev = slow;
+                slow = next;                              
         } else {
             break;
         }
     }
     
+    // slow stop middle for odd, or left middle for even
+    // when fast stop, slow->next is not handle in the loop
+    // so change here
+    next = slow->next;
+    slow->next = prev;
+    
     listNode * forward, *reverse;
     if (list->len % 2 == 0) {
-        // in the condition of pos2->next->next == NULL
-        forward = pos1->next;
-        reverse = pos1;
+        forward = next;
+        reverse = slow;
     } else {
-        forward = pos1->next;
+        forward = next;
         reverse = prev;
     }
     
+   
     while(forward) {
-        
+        printf("%c, %c\n", *(char*)reverse->value, *(char*) forward->value);
         if (! (list->match(reverse->value, forward->value))) {
             // release
             return FALSE;
         }
-        printf("%c, %c\n", *(char*)reverse->value, *(char*) forward->value);
         
         forward = forward->next;
         reverse = reverse->next;
@@ -102,6 +104,7 @@ BOOL isArrayPalindrome(char a[], int size) {
         *tmp = a[i];
         listAddNodeTail(list, tmp);
     }
+     printf("-------------------start\n");
     listOutput(list);
     if(isPalindrome(list)) {
         printf("True\n");
@@ -119,12 +122,15 @@ void main() {
     char b[7] = {'a', 'b', 'c', 'd', 'c', 'a', 'a'};
     
     char c[8] = {'a', 'b', 'c', 'd', 'd', 'c', 'b', 'a'};
-    char d[8] = {'a', 'b', 'c', 'd', 'd', 'c', 'b', 'a'};
+    char d[8] = {'a', 'b', 'c', 'd', 'e', 'c', 'b', 'a'};
     
     char e[1] = {'a'};
     char f[2] = {'a', 'b'};
     char g[2] = {'a', 'a'};
+    char h[3] = {'a', 'b', 'a'};
+    char i[4] = {'a', 'b', 'b', 'c'};
     
+
     isArrayPalindrome(a, sizeof(a)/ sizeof(a[0]));
     isArrayPalindrome(b, sizeof(b)/ sizeof(b[0]));
     isArrayPalindrome(c, sizeof(c)/ sizeof(c[0]));
@@ -132,6 +138,9 @@ void main() {
     isArrayPalindrome(e, sizeof(e)/ sizeof(e[0]));
     isArrayPalindrome(f, sizeof(f)/ sizeof(f[0]));
     isArrayPalindrome(g, sizeof(g)/ sizeof(g[0]));
+    isArrayPalindrome(h, sizeof(h)/ sizeof(h[0]));
+    
+    isArrayPalindrome(i, sizeof(i)/ sizeof(h[0]));
 }
 
 
