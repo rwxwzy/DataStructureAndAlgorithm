@@ -21,7 +21,8 @@ typedef struct listNode {
     void *value;
     struct listNode *next;
 } listNode;
-typedef output void(*output)(void *value);
+
+typedef void (*output)(void *value);
 
 typedef struct list {
     listNode *head;
@@ -33,6 +34,9 @@ typedef struct list {
 } list;
 
 list *listAddNodeTail(list *list, void *value);
+list* listCreate(output output);
+void listOutput(list *list);
+void listRelease(list *list);
 
 
 #endif

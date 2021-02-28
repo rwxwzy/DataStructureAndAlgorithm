@@ -5,11 +5,11 @@
 
 
 /*
- *  each element in 4 components: list, head, tail, node
+ *  each element in list and node
  *
  */
 
-list* listCreate(out output) {
+list* listCreate(output output) {
     struct list *list;
     if ((list = (struct list*) malloc(sizeof(struct list))) == NULL) {
         return NULL;
@@ -18,13 +18,37 @@ list* listCreate(out output) {
     list->head = NULL;
     list->tail = NULL;
     list->len = 0;
-    list->output = out;
+    list->output = output;
 }
 
 void listRelease(list *list) {
     listNode *node = list->head;
+    listNode *tmp;
     while(list->len != 0) {
+        tmp = node->next;
+        if (list->free != NULL) {
+            list->free(node->value);
+            free(node);
+        }
         
+        node = tmp;
+        list->len --;
+    }
+    
+    free(list);
+}
+
+void listOutput(list *list) {
+    if (list->output == NULL) {
+        return;
+    }
+    
+    unsigned long len = list->len;
+    listNode *current = list->head;
+    while(len) {
+        list->output(current->value);
+        current = current->next;
+        len --;
     }
 }
 
