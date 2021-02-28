@@ -10,7 +10,7 @@
 #endif
 
 #ifndef FALSE
-#define FALSE 1
+#define FALSE 0
 #endif
 
 #ifndef BOOL
@@ -23,18 +23,19 @@ typedef struct listNode {
 } listNode;
 
 typedef void (*output)(void *value);
+typedef BOOL (*match)(void *value1, void* value2);
 
 typedef struct list {
     listNode *head;
     listNode *tail;
     unsigned long len;
     void (*free)(void *ptr);
-    int (*match)(void *ptr, void *key);
+    BOOL (*match)(void *value1, void *value2);
     void (*output)(void *value);
 } list;
 
 list *listAddNodeTail(list *list, void *value);
-list* listCreate(output output);
+list* listCreate(output output, match match);
 void listOutput(list *list);
 void listRelease(list *list);
 

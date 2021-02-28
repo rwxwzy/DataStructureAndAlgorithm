@@ -9,7 +9,7 @@
  *
  */
 
-list* listCreate(output output) {
+list* listCreate(output output, match match) {
     struct list *list;
     if ((list = (struct list*) malloc(sizeof(struct list))) == NULL) {
         return NULL;
@@ -19,6 +19,7 @@ list* listCreate(output output) {
     list->tail = NULL;
     list->len = 0;
     list->output = output;
+    list->match = match;
 }
 
 void listRelease(list *list) {
@@ -43,12 +44,14 @@ void listOutput(list *list) {
         return;
     }
     
+    printf("len: %ld\n", list->len);
+    
     unsigned long len = list->len;
     listNode *current = list->head;
     while(len) {
         list->output(current->value);
         current = current->next;
-        len --;
+        len = len - 1;
     }
 }
 
