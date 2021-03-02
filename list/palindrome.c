@@ -90,7 +90,7 @@ BOOL isPalindrome(list *list) {
         forward = forward->next;
         reverse = reverse->next;
     }
-    //release
+    // recover
     return TRUE;
 }
 
