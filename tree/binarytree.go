@@ -38,32 +38,43 @@ func (bt *BinaryTree)AddNode(data int) {
         bt.root.AddNode(n)
     }
 }
-func (bt *BinaryTree)PreOrder(node *Node){
+
+/*
+void traverse(TreeNode root) {
+    // 前序遍历代码位置
+    traverse(root.left)
+    // 中序遍历代码位置
+    traverse(root.right)
+    // 后序遍历代码位置
+}
+*/
+
+
+func (bt *BinaryTree)PreOrderTraverse(node *Node){
     if node == nil {
         return
     }
-    bt.PreOrder(node.left)
     fmt.Println(node.data)
-    bt.PreOrder(node.right)
+    bt.PreOrderTraverse(node.left)
+    bt.PreOrderTraverse(node.right)
 }
 
-func(bt *BinaryTree)PostOrder(node *Node) {
+func(bt *BinaryTree)InOrderTraverse(node *Node) {
     if node == nil {
         return
     }
-    bt.PostOrder(node.right)
+    bt.InOrderTraverse(node.left)
     fmt.Println(node.data)
-    bt.PostOrder(node.left)
+    bt.InOrderTraverse(node.right)
 }
 
-func(bt *BinaryTree)InOrder(node *Node) {
+func(bt *BinaryTree)PostOrderTraverse(node *Node) {
     if node == nil {
         return
     }
+    bt.PostOrderTraverse(node.left)
+    bt.PostOrderTraverse(node.right)
     fmt.Println(node.data)
-    bt.InOrder(node.right)
-    
-    bt.InOrder(node.left)
 }
 
 // TODO: remove
@@ -75,14 +86,21 @@ func main() {
     b.AddNode(9)
     b.AddNode(12)
     b.AddNode(13)
-    b.AddNode(9)
+    b.AddNode(7)
     b.AddNode(11)
-    fmt.Println("PreOrder---------------")
-    b.PreOrder(b.root)
-    fmt.Println("PostOrder---------------")
-    b.PostOrder(b.root)
-    fmt.Println("InOrder---------------")
-    b.InOrder(b.root)
+    b.AddNode(8)
+
+    fmt.Println("PreOrderTraverse---------------")
+    b.PreOrderTraverse(b.root)
+
+    fmt.Println("InOrderTraverse---------------")
+    b.InOrderTraverse(b.root)
+
+
+    fmt.Println("PostOrderTraverse---------------")
+    b.PostOrderTraverse(b.root)
+
+
 }
 
 
