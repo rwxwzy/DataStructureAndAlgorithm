@@ -32,6 +32,11 @@ func (s *SList)AddNode(data int) error {
     s.length ++
     return nil
 }
+
+func (s *SList) Head() *Node {
+    return s.head
+}
+
 func (s *SList)DelNode(data int) error {
     if s.head == nil { // 0
         return nil
@@ -102,9 +107,7 @@ func (s *SList)ReverseByRecursion(head *Node) *Node {
     fmt.Printf("last: %d\n", last.data)
     return last
 }
-
-
-func main() {
+func testReverse() {
     slist := NewSList()
     slist.AddNode(9)
     slist.AddNode(1)
@@ -123,15 +126,66 @@ func main() {
     slist.DelNode(9)
     slist.Traverse()
 
-    /*
     slist.Reverse()
     slist.Traverse()
-    */
 
     fmt.Println("recursion")
     slist.ReverseByRecursionWrapper()
     slist.Traverse()
     fmt.Println("finish")
+}
+
+func (s *SList)MergeSortedList(anotherList *SList) {
+    q1 := s.head
+    q2 := anotherList.head
+    var q *Node = &Node{}
+    head := q //dummy
+
+    for q1 != nil && q2 != nil {
+        if q1.data > q2.data {
+            q.next = q2
+            q2 = q2.next
+        } else {
+            q.next = q1
+            q1 = q1.next
+        }
+        q = q.next
+    }
+
+    if q1 != nil {
+        q.next = q1
+    }
+
+    if q2 != nil {
+        q.next = q2
+    }
+
+    s.head = head.next // dummy
+}
 
 
+func testMergeSortList() {
+    s1 := NewSList()
+    s1.AddNode(1)
+    s1.AddNode(3)
+    s1.AddNode(5)
+    s1.AddNode(7)
+    s1.AddNode(9)
+    s1.AddNode(11)
+
+    s2 := NewSList()
+    s2.AddNode(0)
+    s2.AddNode(2)
+    s2.AddNode(4)
+    s2.AddNode(6)
+    s2.AddNode(8)
+    s2.AddNode(10)
+
+    s1.MergeSortedList(s2)
+
+    s1.Traverse()
+}
+
+func main() {
+    testMergeSortList()
 }
