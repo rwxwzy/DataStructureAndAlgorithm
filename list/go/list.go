@@ -140,7 +140,7 @@ func (s *SList)MergeSortedList(anotherList *SList) {
     q2 := anotherList.head
     var q *Node = &Node{}
     head := q //dummy
-
+    // q1, q2 要领先q一个位次，所以q.next不会覆盖或中断或许的node
     for q1 != nil && q2 != nil {
         if q1.data > q2.data {
             q.next = q2
@@ -178,6 +178,7 @@ func testMergeSortList() {
     s2.AddNode(2)
     s2.AddNode(4)
     s2.AddNode(6)
+    s2.AddNode(7)
     s2.AddNode(8)
     s2.AddNode(10)
 
